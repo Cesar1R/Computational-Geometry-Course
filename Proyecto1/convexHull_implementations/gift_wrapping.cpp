@@ -1,14 +1,21 @@
+/*
+g++ -o convexHull_implementations/gift_wrapping convexHull_implementations/gift_wrapping.cpp geo_prop.cpp -I.
+*/
+
+
 #include"geo_prop.h"
 #include<iostream>
 #include<vector>
 #include<algorithm>
 #include<set>
-
 using namespace std;
 using namespace geoProp;
 using console_operations::print_vector; 
 using file_operations::save_vector; 
 using file_operations::load_vector; 
+
+string process_path = "";
+
 
 vector<point> gift_wrapping(vector<point> & S){
 
@@ -31,6 +38,8 @@ vector<point> gift_wrapping(vector<point> & S){
     int current = leftmost; 
     int prev = -1; 
 
+    int cont_progres = 0;
+
     do{
         if(convex_hull.empty() || S[current] != convex_hull.back()){
             convex_hull.push_back(S[current]);
@@ -49,20 +58,28 @@ vector<point> gift_wrapping(vector<point> & S){
 
         prev = current; 
         current = next;
-    }while(current != 0 && convex_hull.size() <= n);
+
+        if(!(cont_progres++ %5)){
+            save_vector(convex_hull, process_path  + "/" + to_string(cont_progres) + ".txt");
+        }
+
+    }while(current != 0 && (int)convex_hull.size() <= n);
     
     vectorProcessing::removeDuplicated(convex_hull);
     return convex_hull; 
 }
 
 int main(int argc, char* argv[]){
-    if(argc != 3){
+    if(argc < 3 || 4 < argc ){
         cerr << "Usage: " << argv[0] << "<input_file> <output_file>" << endl; 
         return 1; 
     }
 
     string in_path = argv[1],
            out_path = argv[2];
+
+    process_path = (argc == 4)? argv[3]:"";
+
 
 	vector<point> vec; 
 

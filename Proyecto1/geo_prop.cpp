@@ -124,6 +124,20 @@ namespace geoProp{
         return std::fabs(std::fabs(sum - 2 * M_PIl)) < EPS;
     }
 
+    bool polarCompare(const point &a, const point &b, const point &pivot){
+        double orient = cross(pivot, a, b);
+
+        if(orient > EPS) return true;
+        if(orient < -EPS) return false;
+
+        //Caso colinear 
+        double distA = norm_sq(toVec(pivot, a)),
+            distB = norm_sq(toVec(pivot, b));
+
+        return distA < distB; 
+    }   
+
+
 }
 
 

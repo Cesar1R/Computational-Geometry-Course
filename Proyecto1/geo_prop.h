@@ -92,6 +92,8 @@ namespace geoProp{
 
     bool inPolygon(const point &pt, const std::vector<point> &P);
 
+    bool polarCompare(const point &a, const point &b, const point &pivot);
+
 }
 
 namespace vectorProcessing{
